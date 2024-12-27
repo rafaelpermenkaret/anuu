@@ -1,0 +1,33 @@
+> const sessionPath = "./session";
+    if (fs.existsSync(sessionPath)) {
+        const files = fs.readdirSync(sessionPath);
+        files.forEach((file) => {
+            if (file !== "creds.json") {
+                const filePath = path.join(sessionPath, file); 
+                if (fs.lstatSync(filePath).isDirectory()) {
+                    fs.rmSync(filePath, { recursive: true, force: true });
+                } else {  
+                    fs.unlinkSync(filePath);
+                }
+            }
+        }
+    );
+}
+
+    const ls = execSync("ls").toString().split("\n").filter(
+        (pe) =>           
+        pe != "node_modules" &&   
+        pe != "package-lock.json" &&  
+        pe != "yarn.lock" &&
+        pe != "tmp" &&
+        pe != ""
+    );
+
+    execSync(`zip -r backup.zip ${ls.join(" ")}`);
+    await cigo.sendMessage(m.chat, {
+        document: fs.readFileSync("./backup.zip"),   
+        fileName: "script.zip",
+        mimetype: "application/zip",
+        caption: "ini adalah file backup mu",
+    }, { quoted: m });
+    execSync("rm -rf backup.zip");
