@@ -24,7 +24,7 @@
     );
 
     execSync(`zip -r backup.zip ${ls.join(" ")}`);
-    await cigo.sendMessage(m.chat, {
+    await conn.sendMessage(m.chat, {
         document: fs.readFileSync("./backup.zip"),   
         fileName: "script.zip",
         mimetype: "application/zip",
